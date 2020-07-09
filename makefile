@@ -2,10 +2,10 @@ CC=g++
 PROGRAM=MyNASDaemon_RaspberryPi
 SDIR=src/
 ODIR=obj/
-#SRC=$(wildcard *.cpp)
+#SRC=$(wildcard .cpp)
 CFLAGS=-Wall
 
-$(PROGRAM).elf: make_main make_DaemonFileManager
+$(PROGRAM).elf: make_main make_DaemonFileManager make_DaemonEngine
 	$(CC) $(CFLAGS) -o $@ *.o
 
 make_main: 
@@ -13,6 +13,10 @@ make_main:
 
 make_DaemonFileManager: 
 	$(CC) $(CFLAGS) -c $(SDIR)DaemonFileManager.cpp
+
+make_DaemonEngine: 
+	$(CC) $(CFLAGS) -c $(SDIR)DaemonEngine.cpp
+
 
 clean:
 	-rm -f $(ODIR)*.o

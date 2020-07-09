@@ -7,11 +7,14 @@
 #ifndef SRC_DAEMONFILEMANAGER_H_
 #define SRC_DAEMONFILEMANAGER_H_
 
-// To check if a directory exists
+#include <iostream>
+
+// To check if a directory/file exists
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
+// To use file streams
 #include <fstream>
 
 // Use C++ string class
@@ -30,7 +33,7 @@ using namespace std;
 class DaemonFileManager {
 
 private:
-	const char * fileConfName = "/etc/MyNASDaemon_RaspberryPi/MyNASDaemon_RaspberryPi.conf";
+	const char * confFileName = "/etc/MyNASDaemon_RaspberryPi/MyNASDaemon_RaspberryPi.conf";
 	const char * folderName = "/etc/MyNASDaemon_RaspberryPi";
 
 	bool setupOk = true;
@@ -40,11 +43,13 @@ private:
 	bool setup();
 	bool dirExists();
 	bool createFolder();
-
+	bool confFileExist();
+	void createConfFile();
 
 public:
 	DaemonFileManager();
 	bool isOk();
+	bool writePidAndRefreshTime(int pid, int timeMs);
 };
 
 #endif /* SRC_DAEMONFILEMANAGER_H_ */

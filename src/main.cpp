@@ -12,31 +12,35 @@
 #include <unistd.h>
 
 #include "DaemonFileManager.h"
+#include "DaemonEngine.h"
+
+
 using namespace std;
 
-int main() {
+int main(){
 
 	DaemonFileManager dmFiles;
 
 	if(dmFiles.isOk()){
 		pid_t pid=fork();
-		switch(pid){
-			case -1:
-				cout << "[FAILS] MyNASDaemon_RaspberryPi fork failed"  << endl;
-				exit(-1);
-			case 0:
 
-				for (int i = 0; i < 12; ++i)
-					cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-				break;
-			default:
-				cout << "!!!Cucu!!!" << endl; // prints !!!Hello World!!!
+		if(pid==-1){
+			cout << "[FAILS] MyNASDaemon_RaspberryPi fork failed"  << endl;
+			exit(-1);
 
-				exit(0);
-			}
+		}else if(pid==0){
+			DaemonEngine engine(dmFiles, (int)pid);
+			engine.start();
+			exit(0);
+
+		}else{
+			cout << "[OK] MyNASDaemon_RaspberryPi is running: "  << pid << endl;
+			exit(0);
+		}
+
 	}
 	else{
-		cout << "[FAILS] MyNASDaemon_RaspberryPi fails during opening daemon config files"  << endl;
+		cout << "[FAILS] MyNASDaemon_RaspberryPi fails setting up .conf file" << endl;
 		exit(-1);
 	}
-}
+}// main()
